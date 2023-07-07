@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo List sederhana</title>
+</head>
+<body>
+  <form action="" name="todo-form">
+    <table>
+      <tbody>
+        <tr>
+          <td><label for="todo">Todo :</label></td>
+          <td><input type="text" id="todo" name="todo"></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><input type="submit" value="Add"></td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
+
+  <h1>TodoList</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Filter : </th>
+        <th><input type="text" name="search" id="search"></th>
+      </tr>
+    </thead>
+    <tbody id="t-body">
+      <tr>
+        <td><input type="button" value="Done"></td>
+        <td>Todo Description</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <script>
+
+    const todoList = [
+      "Kerja",
+      "Belajar",
+      "Kuliah",
+      "Masuk ITS 2024",
+      "Semangat Kerja",
+      "Belajar Pemogramanan",
+      "JS DOM",
+      "Express JS"
+    ]; //untuk menampung semua data todolist ini berupa array
+
+    function clearTodolist() {
+      const tbody = document.getElementById('t-body');
+      while (tbody.firstChild) {
+        tbody.removeChild(tbody.firstChild)
+      }
+    }
+    function hapusTodoList(index) {
+      todoList.splice(index,1)
+      menampilkanTodolist();
+    }
+    function addTodolist(index, todo) {
+      const tr = document.createElement('tr');
+        const tdButton = document.createElement('td');
+        tr.appendChild(tdButton);
+        const btnDone = document.createElement('input');
+        btnDone.type = 'button';
+        btnDone.value = 'Done';
+        btnDone.onclick = function (){
+          hapusTodoList(index);
+        };
+        tdButton.appendChild(btnDone)
+
+        const tdTodo = document.createElement('td');
+        tdTodo.textContent = todo;
+        tr.appendChild(tdTodo)
+
+        const tbody = document.getElementById('t-body');
+        tbody.appendChild(tr)
+    }
+
+    function menampilkanTodolist() {
+      clearTodolist();
+      for (let i = 0; i < todoList.length; i++) {
+        // const todo = todoList[i];
+        // fitur filter dan search
+        const searchText = document.getElementById('search').value.toLowerCase();
+        if (todoList[i].toLowerCase().includes(searchText)) {
+          addTodolist(i, todoList[i])
+        }
+      }
+    }
+    const search = document.getElementById('search');
+    search.onkeydown = function () {
+      menampilkanTodolist();
+    }
+    search.onkeyup = function () {
+      menampilkanTodolist();
+    }
+
+    const forms = document.forms['todo-form'];
+    forms.onsubmit = function (event) {
+      event.preventDefault(); //untuk tidak auto submit
+      const todo =  forms['todo'].value;// mengambil nilai todo  nya
+
+      todoList.push(todo);// memasukan todo ke dalam todolist
+      forms.reset();
+      console.log(todoList);
+      menampilkanTodolist();
+    };
+
+
+    menampilkanTodolist();
+
+    
+
+
+  </script>
+
+</body>
+</html>
